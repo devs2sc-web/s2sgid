@@ -1,0 +1,1245 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>แผงควบคุมระบบ (Admin Panel) | SEED TO SUCCESS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<script src="default-data.js"></script>
+<style>
+:root {
+  --soil-bg: #110d08;
+  --soil-panel: #1b140e;
+  --soil-border: rgba(240, 180, 60, 0.18);
+  --soil-input: #261c14;
+  --gold: #f0b43c;
+  --gold-soft: #ffd98a;
+  --gold-glow: rgba(240, 180, 60, 0.25);
+  --sprout: #9bd45f;
+  --leaf: #4a9a4e;
+  --ink: #fff8ea;
+  --ink-muted: rgba(255, 248, 234, 0.65);
+  --ink-faint: rgba(255, 248, 234, 0.35);
+  --danger: #ff6b6b;
+  --danger-bg: rgba(255, 107, 107, 0.15);
+  --success: #51cf66;
+  --radius: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--soil-bg);
+  color: var(--ink);
+  font-family: 'Anuphan', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+/* Header */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(23, 16, 10, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--soil-border);
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--gold), #bd7b2a);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  color: #17100a;
+}
+.brand-text h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.brand-text p {
+  font-size: 0.75rem;
+  color: var(--gold-soft);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn-gold {
+  background: var(--gold);
+  color: #17100a;
+  box-shadow: 0 2px 10px var(--gold-glow);
+}
+.btn-gold:hover {
+  background: var(--gold-soft);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  background: rgba(255, 248, 234, 0.05);
+  border-color: var(--soil-border);
+  color: var(--ink);
+}
+.btn-outline:hover {
+  background: rgba(255, 248, 234, 0.1);
+  border-color: var(--gold);
+  color: var(--gold-soft);
+}
+.btn-danger {
+  background: var(--danger-bg);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: var(--danger);
+}
+.btn-danger:hover {
+  background: rgba(255, 107, 107, 0.25);
+}
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+/* Main Layout */
+.layout {
+  display: flex;
+  flex: 1;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Sidebar Nav */
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--soil-border);
+  padding: 1.2rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  position: sticky;
+  top: 61px;
+  height: calc(100vh - 61px);
+  overflow-y: auto;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  font-size: 0.9rem;
+}
+.nav-item:hover {
+  background: rgba(255, 248, 234, 0.05);
+  color: var(--ink);
+}
+.nav-item.active {
+  background: rgba(240, 180, 60, 0.12);
+  color: var(--gold);
+  font-weight: 600;
+  border-left: 3px solid var(--gold);
+}
+.nav-badge {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ink-muted);
+}
+.nav-item.active .nav-badge {
+  background: var(--gold);
+  color: #17100a;
+  font-weight: 700;
+}
+
+/* Content Area */
+.content {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  overflow-y: auto;
+  max-width: 950px;
+}
+
+.section-pane {
+  display: none;
+  animation: fadeIn 0.25s ease-out forwards;
+}
+.section-pane.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pane-header {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--soil-border);
+}
+.pane-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.pane-desc {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  margin-top: 0.35rem;
+}
+
+/* Form Groups & Cards */
+.card {
+  background: var(--soil-panel);
+  border: 1px solid var(--soil-border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+.card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--gold-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+.form-group:last-child {
+  margin-bottom: 0;
+}
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 0.45rem;
+}
+.label-sub {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  font-weight: normal;
+}
+.input, .textarea {
+  width: 100%;
+  background: var(--soil-input);
+  border: 1px solid rgba(240, 180, 60, 0.2);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.92rem;
+  padding: 0.65rem 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.input:focus, .textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(240, 180, 60, 0.15);
+  background: #2f2219;
+}
+.textarea {
+  min-height: 85px;
+  resize: vertical;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.tip-banner {
+  background: rgba(240, 180, 60, 0.08);
+  border-left: 3px solid var(--gold);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.4rem;
+  font-size: 0.85rem;
+  color: var(--gold-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  line-height: 1.5;
+}
+
+/* Dynamic Item Lists */
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.list-item-card {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  position: relative;
+}
+.item-inputs {
+  flex: 1;
+  display: grid;
+  gap: 0.6rem;
+}
+.item-del-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink-faint);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+.item-del-btn:hover {
+  color: var(--danger);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+/* Toast */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  background: #1f3d2a;
+  border: 1px solid var(--sprout);
+  color: #fff;
+  padding: 0.8rem 1.4rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Status indicator badge */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.76rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  background: rgba(81, 207, 102, 0.15);
+  color: var(--success);
+  border: 1px solid rgba(81, 207, 102, 0.3);
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 120;
+  display: none;
+  place-items: center;
+  padding: 1rem;
+}
+.modal-overlay.open {
+  display: grid;
+}
+.modal-box {
+  background: var(--soil-panel);
+  border: 1px solid var(--soil-border);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  padding: 1.8rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.modal-box h3 {
+  font-size: 1.2rem;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+.modal-box p {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.4rem;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+}
+
+@media (max-width: 860px) {
+  .layout { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--soil-border);
+    flex-direction: row;
+    overflow-x: auto;
+    position: static;
+    padding: 0.6rem;
+  }
+  .nav-item { white-space: nowrap; padding: 0.5rem 0.8rem; }
+  .content { padding: 1.2rem; }
+  .top-actions .btn span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header Bar -->
+<header class="topbar">
+  <a href="index.html" class="brand" target="_blank" title="คลิกเพื่อดูหน้าเว็บไซต์หลัก">
+    <div class="brand-icon">🌱</div>
+    <div class="brand-text">
+      <h1>SEED TO SUCCESS</h1>
+      <p>ระบบจัดการเนื้อหา (Admin Control Panel)</p>
+    </div>
+  </a>
+
+  <div class="top-actions">
+    <div class="status-pill">
+      <span class="status-dot"></span>
+      <span>พร้อมใช้งาน (Auto-sync)</span>
+    </div>
+    <button type="button" class="btn btn-outline" id="btnPreview" title="เปิดหน้าเว็บไซต์ในแท็บใหม่">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      <span>ดูหน้าเว็บจริง</span>
+    </button>
+    <button type="button" class="btn btn-gold" id="btnSaveTop">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+      <span>บันทึกข้อมูล</span>
+    </button>
+  </div>
+</header>
+
+<!-- Main Container -->
+<div class="layout">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="nav-item active" data-target="pane-general">
+      <span>🌐 ข้อมูลทั่วไป & แถบหัว</span>
+      <span class="nav-badge">ทั่วไป</span>
+    </div>
+    <div class="nav-item" data-target="pane-hero">
+      <span>🌱 บทที่ 0: หน้าแรก (Hero)</span>
+      <span class="nav-badge">#0</span>
+    </div>
+    <div class="nav-item" data-target="pane-c1">
+      <span>🤝 บทที่ 1: ความร่วมมือ</span>
+      <span class="nav-badge">#1</span>
+    </div>
+    <div class="nav-item" data-target="pane-c2">
+      <span>💡 บทที่ 2: การเรียนรู้ & ทักษะ</span>
+      <span class="nav-badge">#2</span>
+    </div>
+    <div class="nav-item" data-target="pane-c3">
+      <span>📅 บทที่ 3: วันปิดโครงการ</span>
+      <span class="nav-badge">#3</span>
+    </div>
+    <div class="nav-item" data-target="pane-c4">
+      <span>💬 บทที่ 4: เสียงจากผู้ร่วมโครงการ</span>
+      <span class="nav-badge">#4</span>
+    </div>
+    <div class="nav-item" data-target="pane-c5">
+      <span>🚀 บทที่ 5: ก้าวต่อไป & ปุ่ม CTA</span>
+      <span class="nav-badge">#5</span>
+    </div>
+    <div class="nav-item" data-target="pane-footer">
+      <span>📄 ข้อมูลท้ายเว็บ (Footer)</span>
+      <span class="nav-badge">ท้ายเว็บ</span>
+    </div>
+    <div class="nav-item" data-target="pane-backup">
+      <span>💾 จัดการไฟล์ & สำรองข้อมูล</span>
+      <span class="nav-badge">JSON/HTML</span>
+    </div>
+  </aside>
+
+  <!-- Content Workspace -->
+  <main class="content">
+
+    <div class="tip-banner">
+      <span style="font-size:1.2rem;">💡</span>
+      <div>
+        <strong>การจัดระเบียบตัวอักษร:</strong> สามารถกดปุ่ม <strong>Enter</strong> เพื่อตัดขึ้นบรรทัดใหม่ได้ทุกช่อง ระบบจะจัดวรรคและขึ้นบรรทัดใหม่บนหน้าเว็บไซต์ตามที่พิมพ์จริงทันที
+      </div>
+    </div>
+
+    <!-- PANE: General -->
+    <section class="section-pane active" id="pane-general">
+      <div class="pane-header">
+        <h2 class="pane-title">🌐 ข้อมูลเว็บไซต์ & แถบหัว (Header)</h2>
+        <p class="pane-desc">กำหนดชื่อแท็บเบราว์เซอร์ ชื่อโครงการ และหน่วยงานที่แสดงด้านบนสุดของหน้าเว็บ</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="siteTitle">ชื่อแท็บเบราว์เซอร์ (&lt;title&gt;)</label>
+          <input type="text" id="siteTitle" class="input" placeholder="เช่น SEED TO SUCCESS เมล็ดพันธุ์สู่ความสำเร็จ">
+        </div>
+        <div class="form-group">
+          <label class="label" for="headerBrand">ชื่อหัวเว็บ (Header Brand Name)</label>
+          <input type="text" id="headerBrand" class="input" placeholder="เช่น SEED TO SUCCESS">
+        </div>
+        <div class="form-group">
+          <label class="label" for="headerOrg">ชื่อหน่วยงาน/องค์กร (Header Subtext)</label>
+          <input type="text" id="headerOrg" class="input" placeholder="เช่น มหาวิทยาลัยธรรมศาสตร์ และเครือสหพัฒน์">
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Hero (Chapter 0) -->
+    <section class="section-pane" id="pane-hero">
+      <div class="pane-header">
+        <h2 class="pane-title">🌱 บทที่ 0: หน้าแรก (Hero Section)</h2>
+        <p class="pane-desc">ส่วนแรกที่ผู้ใช้เห็นเมื่อเปิดเข้ามา จุดเริ่มต้นของเมล็ดพันธุ์ใต้ผืนดิน</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="heroDot">ข้อความจุดนำทาง (Navigation Dot Label)</label>
+          <input type="text" id="heroDot" class="input" placeholder="เมล็ดพันธุ์">
+        </div>
+        <div class="form-group">
+          <label class="label" for="heroTitle">หัวข้อหลัก (Title H1)</label>
+          <textarea id="heroTitle" class="textarea" rows="2" style="min-height:54px" placeholder="SEED TO SUCCESS"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="heroSub">คำโปรยรอง (Subtitle)</label>
+          <textarea id="heroSub" class="textarea" rows="2" style="min-height:54px" placeholder="เมล็ดพันธุ์สู่ความสำเร็จ"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="heroDesc">คำอธิบายโครงการ</label>
+          <textarea id="heroDesc" class="textarea" placeholder="โครงการฝึกงานภาคฤดูร้อนที่..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="heroHint">ข้อความแนะนำการเลื่อน (Scroll Hint)</label>
+          <input type="text" id="heroHint" class="input" placeholder="เลื่อนลงเพื่อดูเมล็ดงอก">
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Chapter 1 -->
+    <section class="section-pane" id="pane-c1">
+      <div class="pane-header">
+        <h2 class="pane-title">🤝 บทที่ 1: ความร่วมมือ</h2>
+        <p class="pane-desc">เนื้อหาเกี่ยวกับความร่วมมือระหว่างมหาวิทยาลัยและเครือสหพัฒน์</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="c1Dot">ข้อความจุดนำทาง (Navigation Dot)</label>
+          <input type="text" id="c1Dot" class="input" placeholder="ความร่วมมือ">
+        </div>
+        <div class="form-group">
+          <label class="label" for="c1Title">หัวข้อบท (Heading 2)</label>
+          <textarea id="c1Title" class="textarea" rows="2" style="min-height:54px" placeholder="ปลูกจากความร่วมมือ"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c1P1">ย่อหน้าที่ 1</label>
+          <textarea id="c1P1" class="textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c1P2">ย่อหน้าที่ 2</label>
+          <textarea id="c1P2" class="textarea"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Chapter 2 -->
+    <section class="section-pane" id="pane-c2">
+      <div class="pane-header">
+        <h2 class="pane-title">💡 บทที่ 2: การเรียนรู้ & ทักษะ</h2>
+        <p class="pane-desc">เนื้อหากระบวนการเรียนรู้และรายการทักษะที่นักศึกษาได้รับ (สามารถเพิ่ม/ลบได้)</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="c2Dot">ข้อความจุดนำทาง (Navigation Dot)</label>
+          <input type="text" id="c2Dot" class="input" placeholder="การเรียนรู้">
+        </div>
+        <div class="form-group">
+          <label class="label" for="c2Title">หัวข้อบท (Heading 2)</label>
+          <textarea id="c2Title" class="textarea" rows="2" style="min-height:54px" placeholder="เรียนรู้จากของจริง"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c2Desc">คำอธิบายกระบวนการเรียนรู้</label>
+          <textarea id="c2Desc" class="textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c2SkillsTitle">หัวข้อรายการทักษะ</label>
+          <input type="text" id="c2SkillsTitle" class="input" placeholder="ทักษะที่ได้ฝึก">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🌿 รายการทักษะที่ได้ฝึก</span>
+          <button type="button" class="btn btn-outline btn-sm" id="btnAddSkill">+ เพิ่มทักษะใหม่</button>
+        </div>
+        <div id="skillsListContainer" class="items-list">
+          <!-- Dynamic Skills -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Chapter 3 -->
+    <section class="section-pane" id="pane-c3">
+      <div class="pane-header">
+        <h2 class="pane-title">📅 บทที่ 3: วันปิดโครงการ</h2>
+        <p class="pane-desc">ข้อมูลวันปิดโครงการและรายการสรุปข้อเท็จจริง (วันที่, สถานที่, ในงาน ฯลฯ)</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="c3Dot">ข้อความจุดนำทาง (Navigation Dot)</label>
+          <input type="text" id="c3Dot" class="input" placeholder="วันปิดโครงการ">
+        </div>
+        <div class="form-group">
+          <label class="label" for="c3Title">หัวข้อบท (Heading 2)</label>
+          <textarea id="c3Title" class="textarea" rows="2" style="min-height:54px" placeholder="วันปิดโครงการ"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c3Desc">คำอธิบาย</label>
+          <textarea id="c3Desc" class="textarea"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>📌 ข้อมูลสรุปในงาน (Facts list)</span>
+          <button type="button" class="btn btn-outline btn-sm" id="btnAddFact">+ เพิ่มหัวข้อข้อมูล</button>
+        </div>
+        <div id="factsListContainer" class="items-list">
+          <!-- Dynamic Facts -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Chapter 4 -->
+    <section class="section-pane" id="pane-c4">
+      <div class="pane-header">
+        <h2 class="pane-title">💬 บทที่ 4: เสียงจากผู้ร่วมโครงการ</h2>
+        <p class="pane-desc">คำกล่าวสะท้อนความคิดเห็นและแรงบันดาลใจจากผู้บริหารและนักศึกษา</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="c4Dot">ข้อความจุดนำทาง (Navigation Dot)</label>
+          <input type="text" id="c4Dot" class="input" placeholder="เสียงจากผู้ร่วมโครงการ">
+        </div>
+        <div class="form-group">
+          <label class="label" for="c4Title">หัวข้อบท (Heading 2)</label>
+          <textarea id="c4Title" class="textarea" rows="2" style="min-height:54px" placeholder="เสียงจากผู้ร่วมโครงการ"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c4Note">หมายเหตุท้ายส่วน (Note)</label>
+          <input type="text" id="c4Note" class="input" placeholder="เรียบเรียงจากข่าวของมหาวิทยาลัยธรรมศาสตร์">
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>🗣️ รายการคำกล่าว (Quotes / Voices)</span>
+          <button type="button" class="btn btn-outline btn-sm" id="btnAddVoice">+ เพิ่มความคิดเห็นใหม่</button>
+        </div>
+        <div id="voicesListContainer" class="items-list">
+          <!-- Dynamic Voices -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Chapter 5 -->
+    <section class="section-pane" id="pane-c5">
+      <div class="pane-header">
+        <h2 class="pane-title">🚀 บทที่ 5: ก้าวต่อไป & ปุ่ม CTA</h2>
+        <p class="pane-desc">ส่วนยอดของต้นไม้ที่เจริญเติบโตเต็มที่ และปุ่มกดอ่านรายละเอียดเพิ่มเติม</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="c5Dot">ข้อความจุดนำทาง (Navigation Dot)</label>
+          <input type="text" id="c5Dot" class="input" placeholder="ก้าวต่อไป">
+        </div>
+        <div class="form-group">
+          <label class="label" for="c5Title">หัวข้อบท (Heading 2)</label>
+          <textarea id="c5Title" class="textarea" rows="2" style="min-height:54px" placeholder="ผลิยอดแล้ว และพร้อมปลูกต่อ"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c5Desc">คำอธิบาย</label>
+          <textarea id="c5Desc" class="textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="c5CtaText">ข้อความบนปุ่ม (CTA Button Text)</label>
+          <input type="text" id="c5CtaText" class="input" placeholder="อ่านข่าวฉบับเต็มที่ tu.ac.th">
+        </div>
+        <div class="form-group">
+          <label class="label" for="c5CtaUrl">ลิงก์ปลายทางเมื่อกดปุ่ม (URL Link)</label>
+          <input type="url" id="c5CtaUrl" class="input" placeholder="https://tu.ac.th/tu04270769/">
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Footer -->
+    <section class="section-pane" id="pane-footer">
+      <div class="pane-header">
+        <h2 class="pane-title">📄 ข้อมูลท้ายเว็บ (Footer)</h2>
+        <p class="pane-desc">ข้อความสงวนสิทธิ์ แหล่งที่มา หรือข้อมูลเครดิตที่แสดงล่างสุดของหน้าเว็บ</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="footerP1">ข้อความย่อหน้าที่ 1</label>
+          <textarea id="footerP1" class="textarea"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="footerP2">ข้อความย่อหน้าที่ 2</label>
+          <textarea id="footerP2" class="textarea"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Backup & File Operations -->
+    <section class="section-pane" id="pane-backup">
+      <div class="pane-header">
+        <h2 class="pane-title">💾 จัดการไฟล์ & สำรองข้อมูล</h2>
+        <p class="pane-desc">นำเข้า/ส่งออกข้อมูลเป็นไฟล์ JSON หรือรีเซ็ตกลับเป็นค่าเริ่มต้น</p>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">📤 ส่งออก / ดาวน์โหลดข้อมูล</h3>
+        <p style="color:var(--ink-muted);font-size:0.88rem;margin-bottom:1rem;">
+          คุณสามารถดาวน์โหลดข้อมูลทั้งหมดที่แก้ไขไว้เก็บเป็นไฟล์ <code>seed-data.json</code> สำหรับสำรองไว้ใช้งาน
+        </p>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <button type="button" class="btn btn-outline" id="btnExportJSON">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            ดาวน์โหลด seed-data.json
+          </button>
+          <button type="button" class="btn btn-gold" id="btnExportDefaultJS" title="ดาวน์โหลดไฟล์ default-data.js นำไปวางในโฟลเดอร์เพื่อให้ทุกคนที่เปิดเว็บเห็นข้อมูลตรงกัน">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            🚀 ดาวน์โหลด default-data.js (สำหรับนำขึ้น Host)
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">📥 นำเข้าข้อมูลจากไฟล์ JSON</h3>
+        <p style="color:var(--ink-muted);font-size:0.88rem;margin-bottom:1rem;">
+          เลือกไฟล์ <code>.json</code> เพื่อนำข้อมูลกลับเข้ามาในระบบ
+        </p>
+        <input type="file" id="fileImportJSON" accept=".json" style="display:none">
+        <button type="button" class="btn btn-outline" id="btnTriggerImport">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          เลือกไฟล์ JSON เพื่อนำเข้า...
+        </button>
+      </div>
+
+      <div class="card" style="border-color: rgba(255, 107, 107, 0.3);">
+        <h3 class="card-title" style="color: var(--danger);">⚠️ คืนค่าเริ่มต้น (Reset to Default)</h3>
+        <p style="color:var(--ink-muted);font-size:0.88rem;margin-bottom:1rem;">
+          ล้างข้อมูลที่เคยแก้ไขทั้งหมด และกลับไปใช้ข้อมูลต้นฉบับเริ่มต้นของโครงการ
+        </p>
+        <button type="button" class="btn btn-danger" id="btnConfirmReset">
+          ล้างข้อมูลและคืนค่าเริ่มต้น
+        </button>
+      </div>
+    </section>
+
+    <!-- Bottom Save Action Bar -->
+    <div style="display:flex;justify-content:flex-end;gap:0.8rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--soil-border);">
+      <button type="button" class="btn btn-outline" id="btnResetCurrentTab">รีเซ็ตหน้านี้</button>
+      <button type="button" class="btn btn-gold" id="btnSaveBottom" style="padding:0.75rem 1.6rem;font-size:0.95rem;">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        บันทึกการเปลี่ยนแปลงทั้งหมด
+      </button>
+    </div>
+
+  </main>
+</div>
+
+<!-- Reset Modal -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box">
+    <h3>ยืนยันการคืนค่าเริ่มต้น?</h3>
+    <p>ข้อมูลที่คุณเคยแก้ไขทั้งหมดจะถูกลบ และแทนที่ด้วยเนื้อหาเริ่มต้นของโครงการ การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-outline" id="btnCancelReset">ยกเลิก</button>
+      <button type="button" class="btn btn-danger" id="btnExecuteReset">ยืนยันคืนค่า</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Alert -->
+<div id="toast">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  <span id="toastMsg">บันทึกข้อมูลเรียบร้อยแล้ว!</span>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const STORAGE_KEY = 'seed_site_data';
+
+  // Load Data
+  function getWorkingData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch(e) {
+      console.warn('Cannot read from localStorage', e);
+    }
+    return JSON.parse(JSON.stringify(window.SEED_DEFAULT_DATA || {}));
+  }
+
+  let currentData = getWorkingData();
+
+  // Elements
+  const navItems = document.querySelectorAll('.nav-item');
+  const panes = document.querySelectorAll('.section-pane');
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+
+  // Tab switching
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const targetId = item.dataset.target;
+      navItems.forEach(n => n.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) targetPane.classList.add('active');
+    });
+  });
+
+  // Dynamic Skill Items
+  const skillsContainer = document.getElementById('skillsListContainer');
+  function renderSkills() {
+    skillsContainer.innerHTML = '';
+    const skills = currentData.chapter2?.skills || [];
+    skills.forEach((skill, index) => {
+      const div = document.createElement('div');
+      div.className = 'list-item-card';
+      div.innerHTML = `
+        <span style="color:var(--sprout);margin-top:0.4rem;font-size:0.9rem;">🌿</span>
+        <div class="item-inputs">
+          <input type="text" class="input skill-input" data-index="${index}" value="${escapeHtml(skill)}" placeholder="เช่น ทำงานเป็นทีม">
+        </div>
+        <button type="button" class="item-del-btn" data-del-skill="${index}" title="ลบรายการนี้">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      `;
+      skillsContainer.appendChild(div);
+    });
+
+    // Del events
+    skillsContainer.querySelectorAll('[data-del-skill]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.delSkill, 10);
+        currentData.chapter2.skills.splice(idx, 1);
+        renderSkills();
+      });
+    });
+
+    // Input change events
+    skillsContainer.querySelectorAll('.skill-input').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.index, 10);
+        currentData.chapter2.skills[idx] = inp.value;
+      });
+    });
+  }
+
+  document.getElementById('btnAddSkill').addEventListener('click', () => {
+    if (!currentData.chapter2.skills) currentData.chapter2.skills = [];
+    currentData.chapter2.skills.push('ทักษะใหม่');
+    renderSkills();
+  });
+
+  // Dynamic Facts Items
+  const factsContainer = document.getElementById('factsListContainer');
+  function renderFacts() {
+    factsContainer.innerHTML = '';
+    const facts = currentData.chapter3?.facts || [];
+    facts.forEach((fact, index) => {
+      const div = document.createElement('div');
+      div.className = 'list-item-card';
+      div.innerHTML = `
+        <span style="color:var(--gold);margin-top:0.4rem;">📌</span>
+        <div class="item-inputs">
+          <input type="text" class="input fact-label" data-index="${index}" value="${escapeHtml(fact.label)}" placeholder="หัวข้อ เช่น วันที่ / สถานที่">
+          <textarea class="textarea fact-val" data-index="${index}" rows="2" style="min-height:54px" placeholder="รายละเอียด เช่น 27 กรกฎาคม 2569">${escapeHtml(fact.value)}</textarea>
+        </div>
+        <button type="button" class="item-del-btn" data-del-fact="${index}" title="ลบรายการนี้">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      `;
+      factsContainer.appendChild(div);
+    });
+
+    factsContainer.querySelectorAll('[data-del-fact]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.delFact, 10);
+        currentData.chapter3.facts.splice(idx, 1);
+        renderFacts();
+      });
+    });
+
+    factsContainer.querySelectorAll('.fact-label').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.index, 10);
+        currentData.chapter3.facts[idx].label = inp.value;
+      });
+    });
+    factsContainer.querySelectorAll('.fact-val').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.index, 10);
+        currentData.chapter3.facts[idx].value = inp.value;
+      });
+    });
+  }
+
+  document.getElementById('btnAddFact').addEventListener('click', () => {
+    if (!currentData.chapter3.facts) currentData.chapter3.facts = [];
+    currentData.chapter3.facts.push({ label: 'หัวข้อใหม่', value: 'รายละเอียด' });
+    renderFacts();
+  });
+
+  // Dynamic Voices Items
+  const voicesContainer = document.getElementById('voicesListContainer');
+  function renderVoices() {
+    voicesContainer.innerHTML = '';
+    const voices = currentData.chapter4?.voices || [];
+    voices.forEach((v, index) => {
+      const div = document.createElement('div');
+      div.className = 'list-item-card';
+      div.innerHTML = `
+        <span style="color:var(--gold-soft);margin-top:0.4rem;">💬</span>
+        <div class="item-inputs">
+          <textarea class="textarea voice-quote" data-index="${index}" placeholder="ข้อความคำพูด">${escapeHtml(v.quote)}</textarea>
+          <textarea class="textarea voice-author" data-index="${index}" rows="2" style="min-height:50px" placeholder="ชื่อและตำแหน่งผู้กล่าว">${escapeHtml(v.author)}</textarea>
+        </div>
+        <button type="button" class="item-del-btn" data-del-voice="${index}" title="ลบรายการนี้">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
+      `;
+      voicesContainer.appendChild(div);
+    });
+
+    voicesContainer.querySelectorAll('[data-del-voice]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.delVoice, 10);
+        currentData.chapter4.voices.splice(idx, 1);
+        renderVoices();
+      });
+    });
+
+    voicesContainer.querySelectorAll('.voice-quote').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.index, 10);
+        currentData.chapter4.voices[idx].quote = inp.value;
+      });
+    });
+    voicesContainer.querySelectorAll('.voice-author').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = parseInt(inp.dataset.index, 10);
+        currentData.chapter4.voices[idx].author = inp.value;
+      });
+    });
+  }
+
+  document.getElementById('btnAddVoice').addEventListener('click', () => {
+    if (!currentData.chapter4.voices) currentData.chapter4.voices = [];
+    currentData.chapter4.voices.push({ quote: 'คำกล่าวสะท้อนความคิดเห็น...', author: 'ชื่อ - ตำแหน่ง' });
+    renderVoices();
+  });
+
+  // Populate form with currentData
+  function populateForm() {
+    const d = currentData;
+    // General
+    document.getElementById('siteTitle').value = d.site?.title || '';
+    document.getElementById('headerBrand').value = d.site?.headerBrand || '';
+    document.getElementById('headerOrg').value = d.site?.headerOrg || '';
+
+    // Hero
+    document.getElementById('heroDot').value = d.hero?.dotLabel || '';
+    document.getElementById('heroTitle').value = d.hero?.title || '';
+    document.getElementById('heroSub').value = d.hero?.subtitle || '';
+    document.getElementById('heroDesc').value = d.hero?.desc || '';
+    document.getElementById('heroHint').value = d.hero?.hint || '';
+
+    // C1
+    document.getElementById('c1Dot').value = d.chapter1?.dotLabel || '';
+    document.getElementById('c1Title').value = d.chapter1?.title || '';
+    document.getElementById('c1P1').value = d.chapter1?.p1 || '';
+    document.getElementById('c1P2').value = d.chapter1?.p2 || '';
+
+    // C2
+    document.getElementById('c2Dot').value = d.chapter2?.dotLabel || '';
+    document.getElementById('c2Title').value = d.chapter2?.title || '';
+    document.getElementById('c2Desc').value = d.chapter2?.desc || '';
+    document.getElementById('c2SkillsTitle').value = d.chapter2?.skillsTitle || '';
+    renderSkills();
+
+    // C3
+    document.getElementById('c3Dot').value = d.chapter3?.dotLabel || '';
+    document.getElementById('c3Title').value = d.chapter3?.title || '';
+    document.getElementById('c3Desc').value = d.chapter3?.desc || '';
+    renderFacts();
+
+    // C4
+    document.getElementById('c4Dot').value = d.chapter4?.dotLabel || '';
+    document.getElementById('c4Title').value = d.chapter4?.title || '';
+    document.getElementById('c4Note').value = d.chapter4?.note || '';
+    renderVoices();
+
+    // C5
+    document.getElementById('c5Dot').value = d.chapter5?.dotLabel || '';
+    document.getElementById('c5Title').value = d.chapter5?.title || '';
+    document.getElementById('c5Desc').value = d.chapter5?.desc || '';
+    document.getElementById('c5CtaText').value = d.chapter5?.ctaText || '';
+    document.getElementById('c5CtaUrl').value = d.chapter5?.ctaUrl || '';
+
+    // Footer
+    document.getElementById('footerP1').value = d.footer?.p1 || '';
+    document.getElementById('footerP2').value = d.footer?.p2 || '';
+  }
+
+  // Collect data from inputs
+  function collectData() {
+    currentData.site = currentData.site || {};
+    currentData.site.title = document.getElementById('siteTitle').value.trim();
+    currentData.site.headerBrand = document.getElementById('headerBrand').value.trim();
+    currentData.site.headerOrg = document.getElementById('headerOrg').value.trim();
+
+    currentData.hero = currentData.hero || {};
+    currentData.hero.dotLabel = document.getElementById('heroDot').value.trim();
+    currentData.hero.title = document.getElementById('heroTitle').value.trim();
+    currentData.hero.subtitle = document.getElementById('heroSub').value.trim();
+    currentData.hero.desc = document.getElementById('heroDesc').value.trim();
+    currentData.hero.hint = document.getElementById('heroHint').value.trim();
+
+    currentData.chapter1 = currentData.chapter1 || {};
+    currentData.chapter1.dotLabel = document.getElementById('c1Dot').value.trim();
+    currentData.chapter1.title = document.getElementById('c1Title').value.trim();
+    currentData.chapter1.p1 = document.getElementById('c1P1').value.trim();
+    currentData.chapter1.p2 = document.getElementById('c1P2').value.trim();
+
+    currentData.chapter2 = currentData.chapter2 || {};
+    currentData.chapter2.dotLabel = document.getElementById('c2Dot').value.trim();
+    currentData.chapter2.title = document.getElementById('c2Title').value.trim();
+    currentData.chapter2.desc = document.getElementById('c2Desc').value.trim();
+    currentData.chapter2.skillsTitle = document.getElementById('c2SkillsTitle').value.trim();
+
+    currentData.chapter3 = currentData.chapter3 || {};
+    currentData.chapter3.dotLabel = document.getElementById('c3Dot').value.trim();
+    currentData.chapter3.title = document.getElementById('c3Title').value.trim();
+    currentData.chapter3.desc = document.getElementById('c3Desc').value.trim();
+
+    currentData.chapter4 = currentData.chapter4 || {};
+    currentData.chapter4.dotLabel = document.getElementById('c4Dot').value.trim();
+    currentData.chapter4.title = document.getElementById('c4Title').value.trim();
+    currentData.chapter4.note = document.getElementById('c4Note').value.trim();
+
+    currentData.chapter5 = currentData.chapter5 || {};
+    currentData.chapter5.dotLabel = document.getElementById('c5Dot').value.trim();
+    currentData.chapter5.title = document.getElementById('c5Title').value.trim();
+    currentData.chapter5.desc = document.getElementById('c5Desc').value.trim();
+    currentData.chapter5.ctaText = document.getElementById('c5CtaText').value.trim();
+    currentData.chapter5.ctaUrl = document.getElementById('c5CtaUrl').value.trim();
+
+    currentData.footer = currentData.footer || {};
+    currentData.footer.p1 = document.getElementById('footerP1').value.trim();
+    currentData.footer.p2 = document.getElementById('footerP2').value.trim();
+  }
+
+  // Save to LocalStorage
+  function saveData() {
+    collectData();
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentData));
+      showToast('บันทึกข้อมูลเรียบร้อยแล้ว! (ซิงค์กับหน้าเว็บทันที)');
+    } catch(e) {
+      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + e.message);
+    }
+  }
+
+  document.getElementById('btnSaveTop').addEventListener('click', saveData);
+  document.getElementById('btnSaveBottom').addEventListener('click', saveData);
+
+  // Live preview button
+  document.getElementById('btnPreview').addEventListener('click', () => {
+    saveData();
+    window.open('index.html', '_blank');
+  });
+
+  // Export JSON
+  document.getElementById('btnExportJSON').addEventListener('click', () => {
+    collectData();
+    const blob = new Blob([JSON.stringify(currentData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'seed-data.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('ดาวน์โหลด seed-data.json เรียบร้อยแล้ว');
+  });
+
+  // Export default-data.js for Hosting
+  document.getElementById('btnExportDefaultJS').addEventListener('click', () => {
+    collectData();
+    const jsContent = '// ข้อมูลเริ่มต้นของเว็บไซต์ SEED TO SUCCESS (อัปเดตล่าสุดจาก Admin)\nwindow.SEED_DEFAULT_DATA = ' + JSON.stringify(currentData, null, 2) + ';\n';
+    const blob = new Blob([jsContent], { type: 'application/javascript;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'default-data.js';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('ดาวน์โหลด default-data.js สำเร็จ! นำไปวางแทนที่ไฟล์เดิมในโฟลเดอร์');
+  });
+
+  // Import JSON
+  const fileImport = document.getElementById('fileImportJSON');
+  document.getElementById('btnTriggerImport').addEventListener('click', () => fileImport.click());
+  fileImport.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const parsed = JSON.parse(evt.target.result);
+        currentData = parsed;
+        populateForm();
+        saveData();
+        showToast('นำเข้าข้อมูลจาก JSON สำเร็จแล้ว!');
+      } catch(err) {
+        alert('ไฟล์ JSON ไม่ถูกต้อง: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    fileImport.value = '';
+  });
+
+  // Reset Modal
+  const resetModal = document.getElementById('resetModal');
+  document.getElementById('btnConfirmReset').addEventListener('click', () => {
+    resetModal.classList.add('open');
+  });
+  document.getElementById('btnCancelReset').addEventListener('click', () => {
+    resetModal.classList.remove('open');
+  });
+  document.getElementById('btnExecuteReset').addEventListener('click', () => {
+    currentData = JSON.parse(JSON.stringify(window.SEED_DEFAULT_DATA || {}));
+    localStorage.removeItem(STORAGE_KEY);
+    populateForm();
+    resetModal.classList.remove('open');
+    showToast('คืนค่าข้อมูลเริ่มต้นเรียบร้อยแล้ว');
+  });
+
+  // Reset Current Tab
+  document.getElementById('btnResetCurrentTab').addEventListener('click', () => {
+    if (confirm('ต้องการโหลดข้อมูลล่าสุดของหน้านี้ใหม่หรือไม่?')) {
+      currentData = getWorkingData();
+      populateForm();
+      showToast('โหลดข้อมูลหน้านี้ใหม่แล้ว');
+    }
+  });
+
+  // Toast Helper
+  let toastTimer;
+  function showToast(msg) {
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3200);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // Keyboard shortcut: Ctrl + S or Cmd + S
+  window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      saveData();
+    }
+  });
+
+  // Init
+  populateForm();
+
+})();
+</script>
+</body>
+</html>
