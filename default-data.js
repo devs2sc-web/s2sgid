@@ -31,9 +31,9 @@ window.SEED_DEFAULT_DATA = {
     ]
   },
   "chapter3": {
-    "dotLabel": "REAL BUSINESS",
-    "title": "REAL BUSINESS",
-    "desc": "REAL-WORLD IMPACT\nREAL BUSINESS. REAL PROBLEMS. REAL IMPACT.\n25 SMEs × 25 CROSS-FACULTY STUDENT TEAMS\n25 ธุรกิจจริง · 25 ทีมสหศาสตร์ · โจทย์จริง · ข้อมูลจริง · ลูกค้าจริง · ผลลัพธ์จริง\nFrom Business Challenges to Measurable Outcomes.\n แต่ละรายจะได้รับทีมพัฒนาธุรกิจที่ประกอบด้วยนักศึกษาจากหลากหลายศาสตร์ Business Finance Economics Design Communication Technology Science Engineering เพื่อมองธุรกิจเดียวกันจากหลายมุม ไม่ใช่การทำ Case Study จำลอง แต่เป็น 25 LIVE BUSINESS CASES. โจทย์จริง ข้อมูลจริง ลูกค้าจริง ตลาดจริง และผลลัพธ์จริง",
+    "dotLabel": "REAL-WORLD IMPACT",
+    "title": "REAL-WORLD IMPACT\nREAL BUSINESS. REAL PROBLEMS. REAL IMPACT.",
+    "desc": "25 SMEs × 25 CROSS-FACULTY STUDENT TEAMS\n25 ธุรกิจจริง · 25 ทีมสหศาสตร์ · โจทย์จริง · ข้อมูลจริง · ลูกค้าจริง · ผลลัพธ์จริง\nFrom Business Challenges to Measurable Outcomes.\n แต่ละรายจะได้รับทีมพัฒนาธุรกิจที่ประกอบด้วยนักศึกษาจากหลากหลายศาสตร์ Business Finance Economics Design Communication Technology Science Engineering เพื่อมองธุรกิจเดียวกันจากหลายมุม ไม่ใช่การทำ Case Study จำลอง แต่เป็น 25 LIVE BUSINESS CASES. โจทย์จริง ข้อมูลจริง ลูกค้าจริง ตลาดจริง และผลลัพธ์จริง",
     "facts": []
   },
   "chapter4": {
@@ -62,16 +62,16 @@ window.SEED_DEFAULT_DATA = {
     "ctaText": "ร่วมเป็นส่วนหนึ่งของ S2S",
     "ctaUrl": "https://tu.ac.th/tu04270769/"
   },
+  "footer": {
+    "p1": "หน้านี้เป็นงานออกแบบตัวอย่าง จัดทำจากเนื้อหาข่าว \n\"ธรรมศาสตร์ x เครือสหพัฒน์ ส่งท้าย SEED TO SUCCESS\"",
+    "p2": "ภาพประกอบทั้งหมดวาดขึ้นใหม่ด้วย SVG ไม่ได้ใช้ภาพจากเว็บไซต์ต้นทาง"
+  },
   "videoSection": {
     "tag": "",
     "title": "",
     "desc": "",
     "videoUrl": "Video/Displays2s.mp4",
-    "quote": "“เราจะไม่หยุดเพียงการสร้างคนที่มีไอเดีย แต่จะร่วมกันสร้างระบบที่เปลี่ยน\nไอเดียให้กลายเป็นธุรกิจที่มีคุณค่าและเติบโตอย่างยั่งยืน”",
-    "imageUrl": "pic/s2spj.jpg"
-  },
-  "footer": {
-    "p1": "หน้านี้เป็นงานออกแบบตัวอย่าง จัดทำจากเนื้อหาข่าว \n\"ธรรมศาสตร์ x เครือสหพัฒน์ ส่งท้าย SEED TO SUCCESS\"",
-    "p2": "ภาพประกอบทั้งหมดวาดขึ้นใหม่ด้วย SVG ไม่ได้ใช้ภาพจากเว็บไซต์ต้นทาง"
+    "imageUrl": "pic/s2spj.jpg",
+    "quote": "เราจะไม่หยุดเพียงการสร้างคนที่มีไอเดีย แต่จะร่วมกันสร้างระบบที่เปลี่ยน\nไอเดียให้กลายเป็นธุรกิจที่มีคุณค่าและเติบโตอย่างยั่งยืน"
   }
 };
