@@ -646,6 +646,10 @@ body {
       <span>📄 ข้อมูลท้ายเว็บ (Footer)</span>
       <span class="nav-badge">ท้ายเว็บ</span>
     </div>
+    <div class="nav-item" data-target="pane-video">
+      <span>🎬 วิดีโอท้ายเว็บ (Video Showcase)</span>
+      <span class="nav-badge">วิดีโอ</span>
+    </div>
     <div class="nav-item" data-target="pane-backup">
       <span>💾 จัดการไฟล์ & สำรองข้อมูล</span>
       <span class="nav-badge">JSON/HTML</span>
@@ -892,6 +896,34 @@ body {
         <div class="form-group">
           <label class="label" for="footerP2">ข้อความย่อหน้าที่ 2</label>
           <textarea id="footerP2" class="textarea"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANE: Video Showcase -->
+    <section class="section-pane" id="pane-video">
+      <div class="pane-header">
+        <h2 class="pane-title">🎬 วิดีโอท้ายเว็บ (Video Showcase)</h2>
+        <p class="pane-desc">ส่วนจัดแสดงวิดีโอแบบ Cinematic Theater เมื่อเลื่อนลงมาล่างสุดของเว็บไซต์</p>
+      </div>
+
+      <div class="card">
+        <div class="form-group">
+          <label class="label" for="videoTag">ป้ายกำกับด้านบน (Tag Badge)</label>
+          <input type="text" id="videoTag" class="input" placeholder="🎬 วิดีโอประมวลภาพโครงการ">
+        </div>
+        <div class="form-group">
+          <label class="label" for="videoTitle">หัวข้อวิดีโอ (Title)</label>
+          <textarea id="videoTitle" class="textarea" rows="2" style="min-height:54px" placeholder="ภาพความสำเร็จ SEED TO SUCCESS"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="videoDesc">คำอธิบายวิดีโอ (Description)</label>
+          <textarea id="videoDesc" class="textarea" placeholder="ชมบรรยากาศการเรียนรู้ การลงมือแก้โจทย์ธุรกิจจริง และพิธีมอบรางวัลของนักศึกษา"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="label" for="videoUrl">ตำแหน่งไฟล์วิดีโอ (Video File Path / URL)</label>
+          <input type="text" id="videoUrl" class="input" placeholder="Video/Displays2s.mp4">
+          <p class="label-sub" style="margin-top:0.4rem;color:var(--gold-soft);">ไฟล์ปัจจุบัน: <code>Video/Displays2s.mp4</code></p>
         </div>
       </div>
     </section>
@@ -1356,6 +1388,12 @@ body {
     document.getElementById('c5CtaText').value = d.chapter5?.ctaText || '';
     document.getElementById('c5CtaUrl').value = d.chapter5?.ctaUrl || '';
 
+    // Video Showcase
+    document.getElementById('videoTag').value = d.videoSection?.tag || '🎬 วิดีโอประมวลภาพโครงการ';
+    document.getElementById('videoTitle').value = d.videoSection?.title || 'ภาพความสำเร็จ SEED TO SUCCESS';
+    document.getElementById('videoDesc').value = d.videoSection?.desc || '';
+    document.getElementById('videoUrl').value = d.videoSection?.videoUrl || 'Video/Displays2s.mp4';
+
     // Footer
     document.getElementById('footerP1').value = d.footer?.p1 || '';
     document.getElementById('footerP2').value = d.footer?.p2 || '';
@@ -1403,6 +1441,12 @@ body {
     currentData.chapter5.desc = document.getElementById('c5Desc').value.trim();
     currentData.chapter5.ctaText = document.getElementById('c5CtaText').value.trim();
     currentData.chapter5.ctaUrl = document.getElementById('c5CtaUrl').value.trim();
+
+    currentData.videoSection = currentData.videoSection || {};
+    currentData.videoSection.tag = document.getElementById('videoTag').value.trim();
+    currentData.videoSection.title = document.getElementById('videoTitle').value.trim();
+    currentData.videoSection.desc = document.getElementById('videoDesc').value.trim();
+    currentData.videoSection.videoUrl = document.getElementById('videoUrl').value.trim();
 
     currentData.footer = currentData.footer || {};
     currentData.footer.p1 = document.getElementById('footerP1').value.trim();
