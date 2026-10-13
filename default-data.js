@@ -33,7 +33,7 @@ window.SEED_DEFAULT_DATA = {
   "chapter3": {
     "dotLabel": "REAL BUSINESS",
     "title": "REAL BUSINESS",
-    "desc": "REAL BUSINESS. REAL PROBLEMS. REAL IMPACT.\n 25 SMEs × 25 CROSS-FACULTY STUDENT TEAMS SME\n แต่ละรายจะได้รับทีมพัฒนาธุรกิจที่ประกอบด้วยนักศึกษาจากหลากหลายศาสตร์ Business Finance Economics Design Communication Technology Science Engineering เพื่อมองธุรกิจเดียวกันจากหลายมุม ไม่ใช่การทำ Case Study จำลอง แต่เป็น 25 LIVE BUSINESS CASES. โจทย์จริง ข้อมูลจริง ลูกค้าจริง ตลาดจริง และผลลัพธ์จริง",
+    "desc": "REAL-WORLD IMPACT\nREAL BUSINESS. REAL PROBLEMS. REAL IMPACT.\n25 SMEs × 25 CROSS-FACULTY STUDENT TEAMS\n25 ธุรกิจจริง · 25 ทีมสหศาสตร์ · โจทย์จริง · ข้อมูลจริง · ลูกค้าจริง · ผลลัพธ์จริง\nFrom Business Challenges to Measurable Outcomes.\n แต่ละรายจะได้รับทีมพัฒนาธุรกิจที่ประกอบด้วยนักศึกษาจากหลากหลายศาสตร์ Business Finance Economics Design Communication Technology Science Engineering เพื่อมองธุรกิจเดียวกันจากหลายมุม ไม่ใช่การทำ Case Study จำลอง แต่เป็น 25 LIVE BUSINESS CASES. โจทย์จริง ข้อมูลจริง ลูกค้าจริง ตลาดจริง และผลลัพธ์จริง",
     "facts": []
   },
   "chapter4": {
@@ -61,6 +61,12 @@ window.SEED_DEFAULT_DATA = {
     "desc": "ทุกการเติบโต เริ่มจากการลงมือปลูก\nหนึ่งไอเดียอาจกลายเป็นธุรกิจที่แข็งแรงขึ้น\nหนึ่งธุรกิจอาจสร้างโอกาสให้ผู้คนอีกมากมาย\nและหนึ่งประสบการณ์จริง อาจจุดประกายการเปลี่ยนแปลงครั้งต่อไป\nS2S ไม่ได้เพียงช่วยให้ธุรกิจเติบโต แต่ชวนทุกคนมาร่วมสร้างอนาคตที่เติบโตไปด้วยกัน\nSEED TO SUCCESS\nFrom Seed to Sustainable Growth",
     "ctaText": "ร่วมเป็นส่วนหนึ่งของ S2S",
     "ctaUrl": "https://tu.ac.th/tu04270769/"
+  },
+  "videoSection": {
+    "tag": "",
+    "title": "",
+    "desc": "",
+    "videoUrl": "Video/Displays2s.mp4"
   },
   "footer": {
     "p1": "หน้านี้เป็นงานออกแบบตัวอย่าง จัดทำจากเนื้อหาข่าว \n\"ธรรมศาสตร์ x เครือสหพัฒน์ ส่งท้าย SEED TO SUCCESS\"",
