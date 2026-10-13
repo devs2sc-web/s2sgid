@@ -113,8 +113,8 @@ a{color:inherit}
 /* ---------- video showcase section ---------- */
 .video-showcase {
   position: relative;
-  background: radial-gradient(circle at 50% 20%, #16241c 0%, #0c1511 60%, #080e0b 100%);
-  padding: clamp(56px, 9vw, 100px) var(--pad);
+  background: radial-gradient(circle at 50% 30%, #16241c 0%, #0c1511 60%, #080e0b 100%);
+  padding: clamp(48px, 7vw, 88px) var(--pad);
   border-top: 1px solid rgba(240, 180, 60, 0.25);
   display: flex;
   justify-content: center;
@@ -124,42 +124,6 @@ a{color:inherit}
   width: 100%;
   max-width: 980px;
   margin: 0 auto;
-  text-align: center;
-}
-.video-header {
-  margin-bottom: 2.2rem;
-}
-.video-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  background: rgba(240, 180, 60, 0.12);
-  border: 1px solid rgba(240, 180, 60, 0.35);
-  color: var(--gold);
-  font-size: 0.88rem;
-  font-weight: 600;
-  padding: 0.35rem 0.95rem;
-  border-radius: 30px;
-  margin-bottom: 1rem;
-  letter-spacing: 0.02em;
-}
-.video-title {
-  font-family: 'Bricolage Grotesque', 'Anuphan', sans-serif;
-  font-weight: 800;
-  font-size: clamp(2rem, 4.2vw, 3.2rem);
-  color: var(--gold);
-  line-height: 1.25;
-  margin-bottom: 0.75rem;
-  text-wrap: balance;
-  white-space: pre-line;
-}
-.video-desc {
-  font-size: clamp(1rem, 1.3vw, 1.15rem);
-  color: var(--ink-soft);
-  max-width: 65ch;
-  margin: 0 auto;
-  line-height: 1.7;
-  white-space: pre-line;
 }
 .video-player-wrapper {
   position: relative;
@@ -184,20 +148,23 @@ a{color:inherit}
   background: #000;
   outline: none;
 }
-.video-footer-info {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  font-size: 0.92rem;
-  color: var(--gold-soft);
-  flex-wrap: wrap;
+.image-showcase-wrapper {
+  margin-top: clamp(28px, 4vw, 44px);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(240, 180, 60, 0.15);
+  border: 1.5px solid rgba(240, 180, 60, 0.35);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
 }
-.video-credit-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.image-showcase-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 45px rgba(240, 180, 60, 0.25);
+  border-color: var(--gold);
+}
+.showcase-img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .end{position:relative;background:var(--night-leaf);color:var(--ink-soft);padding:clamp(32px,6vw,64px) var(--pad);font-size:.9rem;line-height:1.8}
@@ -327,24 +294,14 @@ a{color:inherit}
 
 <section class="video-showcase" id="video-showcase">
   <div class="video-container">
-    <div class="video-header">
-      <span class="video-tag">🎬 วิดีโอประมวลภาพโครงการ</span>
-      <h2 class="video-title">ภาพความสำเร็จ SEED TO SUCCESS</h2>
-      <p class="video-desc">ชมบรรยากาศการเรียนรู้ การลงมือแก้โจทย์ธุรกิจจริง และพิธีมอบรางวัลของนักศึกษา</p>
-    </div>
-
     <div class="video-player-wrapper">
       <video class="video-player" id="mainVideo" controls playsinline preload="metadata">
         <source src="Video/Displays2s.mp4" type="video/mp4">
         เบราว์เซอร์ของคุณไม่รองรับการเล่นวิดีโอ HTML5
       </video>
     </div>
-
-    <div class="video-footer-info">
-      <div class="video-credit-item">
-        <span>📍</span>
-        <span>ความร่วมมือระหว่าง มหาวิทยาลัยธรรมศาสตร์ และ เครือสหพัฒน์</span>
-      </div>
+    <div class="image-showcase-wrapper">
+      <img src="pic/s2spj.jpg" alt="SEED TO SUCCESS" class="showcase-img" id="mainShowcaseImg" loading="lazy">
     </div>
   </div>
 </section>
@@ -980,18 +937,18 @@ requestAnimationFrame(tickPre);
       // Video Showcase Section
       const vSection = document.querySelector('#video-showcase');
       if (vSection && data.videoSection) {
-        const vTag = vSection.querySelector('.video-tag');
-        const vTitle = vSection.querySelector('.video-title');
-        const vDesc = vSection.querySelector('.video-desc');
         const vPlayer = vSection.querySelector('#mainVideo');
-        if (vTag && data.videoSection.tag) vTag.textContent = cleanText(data.videoSection.tag);
-        if (vTitle && data.videoSection.title) vTitle.textContent = cleanText(data.videoSection.title);
-        if (vDesc && data.videoSection.desc) vDesc.textContent = cleanText(data.videoSection.desc);
         if (vPlayer && data.videoSection.videoUrl) {
           const vSource = vPlayer.querySelector('source');
           if (vSource && vSource.getAttribute('src') !== data.videoSection.videoUrl) {
             vSource.setAttribute('src', data.videoSection.videoUrl);
             vPlayer.load();
+          }
+        }
+        const vImg = vSection.querySelector('#mainShowcaseImg');
+        if (vImg && data.videoSection.imageUrl) {
+          if (vImg.getAttribute('src') !== data.videoSection.imageUrl) {
+            vImg.setAttribute('src', data.videoSection.imageUrl);
           }
         }
       }
